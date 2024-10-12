@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "unbuild",
-    "start": "node dist/index.cjs"
+    "start": "node dist/index.cjs",
+    "dev": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",

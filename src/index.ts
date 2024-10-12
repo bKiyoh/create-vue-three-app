@@ -8,19 +8,14 @@ const main = defineCommand({
     version: "1.0.0",
     description: "My Awesome CLI App",
   },
-  args: {
-    name: {
-      type: "positional",
-      description: "Your name",
-      required: true,
-    },
-    friendly: {
-      type: "boolean",
-      description: "Use friendly greeting",
-    },
-  },
-  run({ args }) {
-    const message = `${args.friendly ? "Hi" : "Greetings"}, ${args.name}!`;
+  run: async () => {
+    // ユーザーに名前を尋ねる
+    const name = await consola.prompt("What is your name?", {
+      type: "text",
+    });
+
+    // 挨拶を表示
+    const message = `Hi, ${name}!!!!`;
     consola.success(message);
   },
 });
