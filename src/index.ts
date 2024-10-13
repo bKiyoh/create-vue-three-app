@@ -1,14 +1,22 @@
-// src/index.ts
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineCommand, runMain } from "citty";
 import { consola } from "consola";
-import { constructTemplateNameAsync } from "./templateSelector";
+import { downloadTemplate } from "giget";
+import { readPackageJSON, writePackageJSON } from "pkg-types";
 import { templates } from "./projectTemplates";
+import { constructTemplateNameAsync } from "./templateSelector";
 
 const main = defineCommand({
-  meta: {
-    name: "my-cli",
-    version: "1.0.0",
-    description: "My Awesome CLI App",
+  meta: async () => {
+    const execDir = path.resolve(fileURLToPath(import.meta.url), "../..");
+    const packageJson = await readPackageJSON(execDir);
+    return {
+      name: "my-cli",
+      version: packageJson.version,
+      description:
+        "A CLI for scaffolding Babylon.js web application project from templates!",
+    };
   },
   args: {
     name: {
@@ -68,9 +76,29 @@ const main = defineCommand({
       initial: false,
     });
 
+    const { projectName, templateDirName, doInstall } = settings;
+    const githubRepoUrlBase = "gh:bKiyoh/my-cli-project/templates";
+
+    const { dir: appDir } = await downloadTemplate(
+      `${githubRepoUrlBase}/${templateDirName}`,
+      {
+        dir: projectName,
+        install: doInstall,
+      }
+    );
+
+    const packageJson = await readPackageJSON(appDir);
+    if (packageJson.name) {
+      packageJson.name = projectName;
+      const jsonPath = path.resolve(appDir, "package.json");
+      await writePackageJSON(jsonPath, packageJson);
+    }
+
     consola.log("\n");
     consola.success("Done!✨");
     consola.info(settings);
+    consola.log(`  cd ${projectName}`);
+    consola.log(`  npm run dev`);
   },
 });
 
