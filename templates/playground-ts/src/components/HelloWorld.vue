@@ -1,10 +1,7 @@
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true,
-  },
-})
+<script setup lang="ts">
+defineProps<{
+  msg: string
+}>()
 </script>
 
 <template>
@@ -16,11 +13,8 @@ defineProps({
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a> +
       <a href="https://threejs.org/" target="_blank" rel="noopener">Three.js</a>
       in
-      <a
-        href="https://developer.mozilla.org/ja/docs/Web/JavaScript"
-        target="_blank"
-        rel="noopener"
-        >JavaScript</a
+      <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener"
+        >TypeScript</a
       >
     </h3>
   </div>
