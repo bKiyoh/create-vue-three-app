@@ -4,6 +4,9 @@
 
 ※[UnJS](https://unjs.io/?utm_source=unjs.io&utm_medium=header-icon&utm_campaign=unjs.io)を勉強目的で作成したため質が良いものではないです
 
+![demo](https://github.com/bKiyoh/my-cli-project/blob/main/docs/demo.gif)
+
+![demo](https://github.com/bKiyoh/my-cli-project/blob/main/docs/scene.gif)
 
 ### 使用技術一覧
 - [UnJS](https://unjs.io/?utm_source=unjs.io&utm_medium=header-icon&utm_campaign=unjs.io)
