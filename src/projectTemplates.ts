@@ -13,7 +13,7 @@ export const templates: TemplateConfig = {
       subSelection: {
         message: "Language?",
         selections: [
-          // { label: `${colorize("blue", "TypeScript")}`, value: "ts" },
+          { label: `${colorize("blue", "TypeScript")}`, value: "ts" },
           { label: `${colorize("yellow", "JavaScript")}`, value: "js" },
         ],
       },
