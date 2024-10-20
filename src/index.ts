@@ -33,6 +33,13 @@ const main = defineCommand({
       valueHint: "template name",
       required: false,
     },
+    dir: {
+      type: "string",
+      alias: ["d"],
+      description: "directory where project will be created.",
+      valueHint: "directory path",
+      required: false,
+    },
     install: {
       type: "boolean",
       alias: ["i"],
@@ -46,6 +53,7 @@ const main = defineCommand({
       projectName: args.name,
       templateDirName: args.template,
       doInstall: args.install,
+      outputDir: args.dir,
     };
 
     settings.projectName ??= await consola.prompt("Project Name?", {
@@ -62,8 +70,6 @@ const main = defineCommand({
           options: selections.map((s) => ({ label: s.label, value: s.value })),
         });
 
-        // 最新バージョンのconsolaでは、promptは値のみを返します。
-        // return val <-- これはランタイム型エラーを引き起こします
         const valStr = val as unknown as string;
         const selected = selections.find((s) => s.value === valStr)!;
 
@@ -71,18 +77,26 @@ const main = defineCommand({
       }
     );
 
+    settings.outputDir ??= await consola.prompt("Project Directory?", {
+      type: "text",
+      // NOTE: 現在のディレクトリを取得 https://nodejs.org/api/process.html#processcwd
+      default: process.cwd(),
+      placeholder: "directory path",
+    });
+
     settings.doInstall ??= await consola.prompt("Install Dependencies?", {
       type: "confirm",
       initial: false,
     });
 
-    const { projectName, templateDirName, doInstall } = settings;
+    const { projectName, templateDirName, doInstall, outputDir } = settings;
     const githubRepoUrlBase = "gh:bKiyoh/my-cli-project/templates";
 
+    const projectPath = path.resolve(outputDir, projectName);
     const { dir: appDir } = await downloadTemplate(
       `${githubRepoUrlBase}/${templateDirName}`,
       {
-        dir: projectName,
+        dir: projectPath,
         install: doInstall,
       }
     );
@@ -94,11 +108,13 @@ const main = defineCommand({
       await writePackageJSON(jsonPath, packageJson);
     }
 
-    consola.log("\n");
+    consola.log(
+      "============================================================================"
+    );
     consola.success("Done!✨");
-    consola.info(settings);
-    consola.log(`  cd ${projectName}`);
-    consola.log(`  npm run dev`);
+    consola.log("\n");
+    consola.info(`🚀 Project created in: ${projectPath}`);
+    consola.log("\n");
   },
 });
 
